@@ -27,7 +27,7 @@ export const useVerification = ( ) => {
       let credential;
       try {
         credential = JSON.parse(credentialJson);
-      } catch (e) {
+      } catch (_e) {
         throw new Error('Invalid JSON format');
       }
 
@@ -46,8 +46,9 @@ export const useVerification = ( ) => {
       const data = await response.json();
       setResult(data);
       return data;
-    } catch (err: any) {
-      const errorMessage = err.message || 'An error occurred during verification';
+    } catch (err: unknown) {
+      // エラーメッセージを安全に取得
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred during verification';
       setError(errorMessage);
       setResult({
         isValid: false,

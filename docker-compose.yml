@@ -1,0 +1,53 @@
+
+services:
+  # バックエンドサーバー
+  server:
+    build:
+      context: ./ginza-six-server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./ginza-six-server/keys:/app/keys
+    restart: unless-stopped
+
+  # スタッフUI
+  staff-ui:
+    build:
+      context: ./nextjs-ginza-six/staff-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://server:3001
+    depends_on:
+      - server
+    restart: unless-stopped
+
+  # ウォレットUI
+  wallet-ui:
+    build:
+      context: ./nextjs-ginza-six/wallet-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://server:3001
+    depends_on:
+      - server
+    restart: unless-stopped
+
+  # 検証UI
+  verifier-ui:
+    build:
+      context: ./nextjs-ginza-six/verifier-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://server:3001
+    depends_on:
+      - server
+    restart: unless-stopped

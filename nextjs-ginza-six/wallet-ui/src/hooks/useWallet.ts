@@ -67,8 +67,10 @@ export const useWallet = ( ) => {
       const data = await response.json();
       saveCredential(data.credential);
       return data.credential;
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
+    } catch (err: unknown) {
+      // エラーメッセージを安全に取得
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
       throw err;
     } finally {
       setIsLoading(false);

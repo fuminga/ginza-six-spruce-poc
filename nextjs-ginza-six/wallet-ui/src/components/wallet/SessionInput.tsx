@@ -20,7 +20,7 @@ export const SessionInput: React.FC = () => {
       await fetchCredential(sessionId);
       setStatus({ type: 'success', message: 'Credential successfully added to your wallet!' });
       setSessionId('');
-    } catch (error) {
+    } catch (_error) {
       setStatus({ type: 'error', message: 'Failed to fetch credential. Please check the session ID.' });
     }
   };
